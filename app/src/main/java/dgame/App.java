@@ -16,6 +16,11 @@ import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.activity.Activity;
 import java.time.Instant;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class App {
     public static void main(String[] args) {
@@ -40,6 +45,12 @@ public class App {
                     // Finally, update the current activity to our activity
                     core.activityManager().updateActivity(activity);
 
+                    // Retrieve gold value from the database
+                    int gold = getGoldFromDatabase();
+                    System.out.println(gold);
+
+                    updateGoldInDatabase(5);
+
                     // Set up the GUI
                     JFrame frame = new JFrame("Dino's Idle Game");
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,7 +67,6 @@ public class App {
 
                     JPanel topBarPanel = new JPanel();
                     topBarPanel.setBackground(Color.GRAY);
-                    topBarPanel.add(new JLabel("Top Bar"));
                     topBarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     topBarPanel.setPreferredSize(new Dimension(0, 50));
 
@@ -76,6 +86,10 @@ public class App {
                     centerPanel.setBackground(Color.WHITE);
                     centerPanel.add(new JLabel("Center Section"));
                     centerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+                    // Display the gold value
+                    JLabel goldLabel = new JLabel("Gold: " + gold);
+                    topBarPanel.add(goldLabel);
 
                     frame.setLayout(new BorderLayout());
 
@@ -103,6 +117,33 @@ public class App {
                     }
                 }
             }
+        }
+    }
+
+    private static int getGoldFromDatabase() {
+        String url = "jdbc:sqlite:C:/Users/akmin/Desktop/EVERYTHING/Code Things/2dGame/user.sqlite"; // replace with your database path
+        String sql = "SELECT gold FROM users WHERE id = 1";
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("gold");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
+
+    private static void updateGoldInDatabase(int gold) {
+        String url = "jdbc:sqlite:C:/Users/akmin/Desktop/EVERYTHING/Code Things/2dGame/user.sqlite";
+        String sql = "UPDATE users SET gold = ? WHERE ID = 1";
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, gold);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

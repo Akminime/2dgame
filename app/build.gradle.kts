@@ -24,7 +24,11 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
 
+    //discord rich pressence
     implementation("com.github.JnCrMx:discord-game-sdk4j:master-SNAPSHOT")
+
+    //SQLite interactions
+    implementation("org.xerial:sqlite-jdbc:3.34.0")
 }
 
 application {
