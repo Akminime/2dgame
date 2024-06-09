@@ -45,7 +45,6 @@ public class App {
         exitButton.addActionListener(e -> {
             System.exit(0);
         });
-
         bottomBarPanel.add(exitButton, BorderLayout.WEST);
 
         JPanel centerPanel = new JPanel();

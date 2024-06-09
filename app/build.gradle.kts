@@ -14,6 +14,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -22,6 +23,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
+
+    implementation("com.github.JnCrMx:discord-game-sdk4j:master-SNAPSHOT")
 }
 
 application {
